@@ -2,23 +2,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
-//Estrutura dos Dados
+//Estrutura dos Dados: DADOS BANCARIOS
 
 typedef struct dados Dados;
 
 struct dados{
-    int valor;
+    char nome[30];
+    int numero;
+    float saldo;
     Dados *proximo;
 
 };
 
 //Função para adicionar no INICIO da lista
 
-void inserirNoInicio(Dados **lista, int novoValor){
+void inserirNoInicio(Dados **lista, char novoNome[], int novoNumero , float novoSaldo){
     Dados *novo;
     novo = (Dados *)malloc(sizeof(Dados));
-    novo->valor = novoValor;
+    strcpy(novo->nome, novoNome);
+    novo->numero = novoNumero;
+    novo->saldo = novoSaldo;
     novo->proximo = *lista;
     *lista = novo;
 
@@ -26,12 +31,14 @@ void inserirNoInicio(Dados **lista, int novoValor){
 
 //Função para adicionar no FINAL da lista
 
-void inserirNoFinal(Dados **lista, int novoValor){
+void inserirNoFinal(Dados **lista, char novoNome[], int novoNumero , float novoSaldo){
     Dados *novo;
     Dados *aux;
     aux = (Dados *)malloc(sizeof(Dados));
     novo = (Dados *)malloc(sizeof(Dados));
-    novo->valor = novoValor;
+    strcpy(novo->nome, novoNome);
+    novo->numero = novoNumero;
+    novo->saldo = novoSaldo;
     novo->proximo = NULL;
     if(*lista == NULL){
         *lista = novo;
@@ -48,9 +55,9 @@ void inserirNoFinal(Dados **lista, int novoValor){
 //Função para IMPRIMIR a lista
 
 void imprimir (Dados *dados){
-    printf("\nLista:\n");
+    printf("\nDados Bancarios:\n");
     while(dados){
-        printf("%d\n",dados->valor);
+        printf("\nNome: %s\nNumero: %d\nSaldo: %2.f\n", dados->nome, dados->numero, dados->saldo);
         dados = dados->proximo;
     }
 
@@ -58,7 +65,7 @@ void imprimir (Dados *dados){
 
 //Função de ORDENAÇÃO utilizando SHELL SORT
  
-void shellSort(int *lista, int tamanho){
+void shellSort(int *listaOrdenada, int tamanho){
 
 
     float k=log(tamanho+1)/log(3); //Cálculo do número de varreduras
@@ -74,19 +81,19 @@ void shellSort(int *lista, int tamanho){
         for(int i=0; i<tamanho-h; i++){
 
             // se indice da frente for menor que o indice de tras, realize a troca.
-            if(lista[i]>lista[i+h]){ 
+            if(listaOrdenada[i]>listaOrdenada[i+h]){ 
 
-                int valor_menor = lista[i+h]; //armazena o indice do menor.
-                lista[i+h] = lista[i]; //troca o indice do menor para o maior.
-                lista[i] = valor_menor; //troca o indice do maior para o menor.
+                int numero_menor = listaOrdenada[i+h]; //armazena o indice do menor.
+                listaOrdenada[i+h] = listaOrdenada[i]; //troca o indice do menor para o maior.
+                listaOrdenada[i] = numero_menor; //troca o indice do maior para o menor.
 
-                int j = i-h;//índice para verificar de os valores anteriores são maiores que o atual.
+                int j = i-h;//índice para verificar de os numeroes anteriores são maiores que o atual.
                 while(j>=0){
 
-                    if(valor_menor<lista[j]){
+                    if(numero_menor<listaOrdenada[j]){
 
-                        lista[i] = lista[j]; //troca o valor_menor que está o indice i para o valor maior.
-                        lista[j] = valor_menor;//troca o valor_maior que está no índice j para o valor menor.
+                        listaOrdenada[i] = listaOrdenada[j]; //troca o numero_menor que está o indice i para o numero maior.
+                        listaOrdenada[j] = numero_menor;//troca o numero_maior que está no índice j para o numero menor.
 
                     }else{break;}
                     j=j-h;//verifica índices anteriores.
@@ -101,51 +108,69 @@ void shellSort(int *lista, int tamanho){
 }
 
 
+
 int main(){
 
     int opcao;
-    int valor;
+    char nome[30];
+    int numero;
+    float saldo;
+    int arr[] = {3, 7, 2, 9, 1, 10, 6, 8, 4, 5};
+    
 
     Dados *lista = NULL;
 
     do{
-        printf("\nESCOLHA UMA OPCAO\n[1] - Inserir no Inicio\n[2] - Inserir no Final\n[3] - Imprimir Dados\n[4] - Sair\n");
+        printf("\nESCOLHA UMA OPCAO\n[1] - Inserir no Inicio\n[2] - Inserir no Final\n[3] - Imprimir Dados\n[4] - Ordenar por saldo\n[5] - Sair\n");
         scanf("%d",&opcao);
 
         switch(opcao){
             case 1:
-                printf("Digite um valor: ");
-                scanf("%d",&valor);
-                inserirNoInicio(&lista, valor);
+                printf("Digite o Nome: ");
+                scanf("%s",nome);
+                fflush(stdin);
+                printf("Digite o Numero: ");
+                scanf("%d",&numero);
+                printf("Digite o Saldo: ");
+                scanf("%f",&saldo);
+                inserirNoInicio(&lista, nome, numero, saldo);
                 break;
 
             case 2:
-                printf("Digite um valor: ");
-                scanf("%d",&valor);
-                inserirNoFinal(&lista, valor);
+                printf("Digite o Nome: ");
+                scanf("%s",nome);
+                fflush(stdin);
+                printf("Digite o Numero: ");
+                scanf("%d",&numero);
+                printf("Digite o Saldo: ");
+                scanf("%f",&saldo);
+                inserirNoFinal(&lista, nome, numero, saldo);
                 break;
 
             case 3:
                 imprimir(lista);
                 break;
 
+            case 4:
+                imprimir(lista);
+                break;
+
+            case 5:
+                shellSort(arr, 10);
+
+                for(int m = 0; m<10; m++){
+                printf("\n%d", arr[m]);
+                }
+                
+                break;
+
             default:
                 if(opcao != 0){
-                    printf("Opção Invalida!\n");
+                    printf("Opcao Invalida!\n");
                 }
         }
 
-    }while(opcao != 4);
-    
-
-    int arr[] = {3, 7, 2, 9, 1, 10, 6, 8, 4, 5};
-
-    shellSort(arr, 10);
-    for(int m = 0; m<10; m++){
-
-        printf("\n%d", arr[m]);
-
-    }
+    }while(opcao != 5);
 
     return 0;
 }
