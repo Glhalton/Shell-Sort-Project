@@ -55,7 +55,7 @@ void inserirNoFinal(Dados **lista, char novoNome[], int novoNumero , float novoS
 //Função para IMPRIMIR a lista
 
 void imprimir (Dados *dados){
-    printf("\nDados Bancarios:\n");
+    printf("\n----------------Dados Bancarios----------------\n");
     while(dados){
         printf("\nNome: %s\nNumero: %d\nSaldo: %2.f\n", dados->nome, dados->numero, dados->saldo);
         dados = dados->proximo;
@@ -65,8 +65,7 @@ void imprimir (Dados *dados){
 
 //Função de ORDENAÇÃO utilizando SHELL SORT
  
-void shellSort(int *listaOrdenada, int tamanho){
-
+void shellSort(float *listaOrdenada, int tamanho){
 
     float k=log(tamanho+1)/log(3); //Cálculo do número de varreduras
 
@@ -107,7 +106,7 @@ void shellSort(int *listaOrdenada, int tamanho){
 
 }
 
-
+int tamanho; // tamanho do array
 
 int main(){
 
@@ -115,53 +114,63 @@ int main(){
     char nome[30];
     int numero;
     float saldo;
-    int arr[] = {3, 7, 2, 9, 1, 10, 6, 8, 4, 5};
-    
 
     Dados *lista = NULL;
 
     do{
-        printf("\nESCOLHA UMA OPCAO\n[1] - Inserir no Inicio\n[2] - Inserir no Final\n[3] - Imprimir Dados\n[4] - Ordenar por saldo\n[5] - Sair\n");
+        printf("\n----------------ESCOLHA UMA OPCAO----------------\n[1] - Inserir no Inicio\n[2] - Inserir no Final\n[3] - Imprimir Dados\n[4] - Ordenar por saldo\n[5] - Sair\n");
         scanf("%d",&opcao);
 
         switch(opcao){
             case 1:
-                printf("Digite o Nome: ");
+                printf("\n>>> Digite o Nome: ");
                 scanf("%s",nome);
                 fflush(stdin);
-                printf("Digite o Numero: ");
+                printf("\n>>> Digite o Numero: ");
                 scanf("%d",&numero);
-                printf("Digite o Saldo: ");
+                printf("\n>>> Digite o Saldo: ");
                 scanf("%f",&saldo);
                 inserirNoInicio(&lista, nome, numero, saldo);
+                tamanho += 1;
                 break;
 
             case 2:
-                printf("Digite o Nome: ");
+                printf("\n>>> Digite o Nome: ");
                 scanf("%s",nome);
                 fflush(stdin);
-                printf("Digite o Numero: ");
+                printf("\n>>> Digite o Numero: ");
                 scanf("%d",&numero);
-                printf("Digite o Saldo: ");
+                printf("\n>>> Digite o Saldo: ");
                 scanf("%f",&saldo);
                 inserirNoFinal(&lista, nome, numero, saldo);
+                tamanho += 1;
                 break;
 
             case 3:
                 imprimir(lista);
                 break;
 
-            case 4:
-                imprimir(lista);
-                break;
+            case 4:{
+                float *arr = (float *)malloc(tamanho * sizeof(float));
+                Dados *aux5 = lista;
+                if(tamanho > 0){
+                    for (int i = 0; i < tamanho; i++){
+                        arr[i] = aux5->saldo;
+                        printf("\nValor no indice(%d): %f", i, arr[i]);
+                        aux5 = aux5->proximo;
 
-            case 5:
-                shellSort(arr, 10);
-
-                for(int m = 0; m<10; m++){
-                printf("\n%d", arr[m]);
+                    }
                 }
-                
+
+                shellSort(arr, tamanho);
+
+                printf("\n----------------EXIBINDO LISTA ORDENADA----------------");
+                for(int m = 0; m<tamanho; m++){
+                    printf("\n%.2f", arr[m]);
+                }
+                break;
+            }
+            case 5:
                 break;
 
             default:
